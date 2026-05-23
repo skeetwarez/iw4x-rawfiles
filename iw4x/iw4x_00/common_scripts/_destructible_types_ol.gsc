@@ -51,7 +51,22 @@ makeType_ol( destructibleType )
 			break;	
 		case "toy_server_rack_mp_mountain_01":
 			toy_server_rack_mp_mountain_01( destructibleType );
-			break;		
+			break;
+		case "toy_shoppingbag_blue":
+			toy_shoppingbag( "blue" );
+			break;			
+		case "toy_shoppingbag_red":
+			toy_shoppingbag( "red" );
+			break;
+		case "vehicle_sportscar":
+			vehicle_sportscar( destructibleType );
+			break;
+		case "vehicle_sportscar_blue":
+			vehicle_sportscar_blue( destructibleType );
+			break;
+		case "vehicle_hummv":
+			vehicle_hummv( destructibleType );
+			break;
 		default:
 			found_ol_destructible = false;
 			break;
@@ -81,15 +96,12 @@ toy_security_camera( destructibleType )
 }
 toy_locker_1x1( destructibleType )
 {
-	//---------------------------------------------------------------------
-	// Locker Double
-	//---------------------------------------------------------------------
-	destructible_create( destructibleType, "tag_origin_1x1", 150, undefined, 32, "no_melee" );
-				
-				destructible_anim( get_precached_anim( "mp_mountain_lockers_tall_1x1_open" ), #animtree, "setanimknob", undefined, 0, "mp_mountain_lockers_tall_1x1_open" );
-				destructible_sound( "lockers_fast", undefined, 0 );
-				
-		destructible_state( undefined, "lockers_tall01_iw6_1x1_open", undefined, undefined, "no_melee" );
+    destructible_create( destructibleType, "tag_origin_1x1", 150, undefined, 32, "no_melee" );
+			
+			destructible_anim( get_precached_anim( "mp_mountain_lockers_tall_1x1_open" ), #animtree, "setanimknob", undefined, undefined, "mp_mountain_lockers_tall_1x1_open" ); destructible_sound( "lockers_fast" );
+			destructible_sound( "lockers_fast" );
+
+		destructible_state( undefined, "lockers_tall01_iw6_1x1_anim", undefined, undefined, "no_melee" );
 }
 toy_console_mp_mountain_a( destructibleType )
 {
@@ -219,4 +231,88 @@ toy_server_rack_mp_mountain_01( destructibleType )
 			destructible_explode( 20, 2000, 32, 32, 32, 48, undefined, 0 ); 	// force_min, force_max, rangeSP, rangeMP, mindamage, maxdamage, continue damage, originoffset
 		destructible_state( undefined, "clk_lab_gas_analyzer_tower01a_dmg_destructible", undefined, undefined, "no_melee" );
 		// door
+}
+toy_shoppingbag( color )
+{
+	//---------------------------------------------------------------------
+	// mp_streamline red and blue shopping bags
+	//---------------------------------------------------------------------
+    destructible_create( "toy_shoppingbag_" + color, "tag_origin", 1 );
+    destructible_fx( "tag_fx", "props/shopping_bag_contents" );
+
+	destructible_physics( "tag_origin", ( 0, 0, 10 ) );	
+	destructible_explode( 600, 651, 1, 1, 10, 20 ); 	// force_min, force_max, rangeSP, rangeMP, mindamage, maxdamage
+	destructible_state( undefined, "str_shopping_bag_" + color + "_dmg", undefined, undefined, "no_melee" );
+}
+vehicle_sportscar( destructibleType )
+{
+	//---------------------------------------------------------------------
+	// red sports car (Raid)
+	//---------------------------------------------------------------------
+	destructible_create( destructibleType , "tag_body", 250, undefined, 32, "no_melee" );
+		//destructible_splash_damage_scaler( 18 );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_whitesmoke", 0.4 );
+			destructible_state( undefined, undefined, 200, undefined, 32, "no_melee" );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_blacksmoke", 0.4 );
+			destructible_state( undefined, undefined, 100, undefined, 32, "no_melee" );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_blacksmoke_fire", 0.4 );
+				destructible_sound( "fire_vehicle_flareup_med" );
+				destructible_loopsound( "fire_vehicle_med" );
+				destructible_healthdrain( 12, 0.2, 150, "allies" );
+			destructible_state( undefined, undefined, 300, "player_only", 32, "no_melee" );
+				destructible_loopsound( "fire_vehicle_med" );
+			destructible_state( undefined, undefined, 400, undefined, 32, "no_melee" );
+				destructible_fx( "tag_death_fx", "explosions/small_vehicle_explosion", false );
+				destructible_sound( "car_explode" );
+				destructible_explode( 4000, 5000, 150, 250, 50, 300, undefined, undefined, 0.3, 500 );
+				destructible_anim( get_precached_anim( "vehicle_80s_sedan1_destroy" ), #animtree, "setanimknob", undefined, undefined, "vehicle_80s_sedan1_destroy" );
+			destructible_state( undefined, "mp_vehicle_sportscar_damaged", undefined, 32, "no_melee" );
+}
+vehicle_sportscar_blue( destructibleType )
+{
+	//---------------------------------------------------------------------
+	// blue sports car (Raid)
+	//---------------------------------------------------------------------
+	destructible_create( destructibleType , "tag_body", 250, undefined, 32, "no_melee" );
+		//destructible_splash_damage_scaler( 18 );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_whitesmoke", 0.4 );
+			destructible_state( undefined, undefined, 200, undefined, 32, "no_melee" );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_blacksmoke", 0.4 );
+			destructible_state( undefined, undefined, 100, undefined, 32, "no_melee" );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_blacksmoke_fire", 0.4 );
+				destructible_sound( "fire_vehicle_flareup_med" );
+				destructible_loopsound( "fire_vehicle_med" );
+				destructible_healthdrain( 12, 0.2, 150, "allies" );
+			destructible_state( undefined, undefined, 300, "player_only", 32, "no_melee" );
+				destructible_loopsound( "fire_vehicle_med" );
+			destructible_state( undefined, undefined, 400, undefined, 32, "no_melee" );
+				destructible_fx( "tag_death_fx", "explosions/small_vehicle_explosion", false );
+				destructible_sound( "car_explode" );
+				destructible_explode( 4000, 5000, 150, 250, 50, 300, undefined, undefined, 0.3, 500 );
+				destructible_anim( get_precached_anim( "vehicle_80s_sedan1_destroy" ), #animtree, "setanimknob", undefined, undefined, "vehicle_80s_sedan1_destroy" );
+			destructible_state( undefined, "mp_vehicle_sportscar_blue_damaged", undefined, 32, "no_melee" );
+}
+vehicle_hummv( destructibleType )
+{
+	//---------------------------------------------------------------------
+	// Hummvee sport car (Raid)
+	//---------------------------------------------------------------------
+	destructible_create( destructibleType , "tag_body", 250, undefined, 32, "no_melee" );
+		//destructible_splash_damage_scaler( 18 );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_whitesmoke", 0.4 );
+			destructible_state( undefined, undefined, 200, undefined, 32, "no_melee" );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_blacksmoke", 0.4 );
+			destructible_state( undefined, undefined, 100, undefined, 32, "no_melee" );
+				destructible_loopfx( "tag_hood_fx", "smoke/car_damage_blacksmoke_fire", 0.4 );
+				destructible_sound( "fire_vehicle_flareup_med" );
+				destructible_loopsound( "fire_vehicle_med" );
+				destructible_healthdrain( 12, 0.2, 150, "allies" );
+			destructible_state( undefined, undefined, 300, "player_only", 32, "no_melee" );
+				destructible_loopsound( "fire_vehicle_med" );
+			destructible_state( undefined, undefined, 400, undefined, 32, "no_melee" );
+				destructible_fx( "tag_death_fx", "explosions/small_vehicle_explosion", false );
+				destructible_sound( "car_explode" );
+				destructible_explode( 4000, 5000, 150, 250, 50, 300, undefined, undefined, 0.3, 500 );
+				destructible_anim( get_precached_anim( "vehicle_80s_sedan1_destroy" ), #animtree, "setanimknob", undefined, undefined, "vehicle_80s_sedan1_destroy" );
+			destructible_state( undefined, "mp_vehicle_hummv_damaged", undefined, 32, "no_melee" );
 }
